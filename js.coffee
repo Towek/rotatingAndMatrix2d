@@ -1,3 +1,7 @@
+degreeCurrent = 0
+rotate1Times = []
+rotate2Times = []
+
 ready = ->
   output = $("#output")
   output2 = $("#output2")
@@ -29,20 +33,45 @@ ready = ->
     #console.log mouse.x+"   "+mouse.y###
   
   setInterval ( -> 
-               rotateAnim(360, 0.1, "#output")
+               start = performance.now()
+               #console.log("Rotating");
+               rotateAnim(90, 0.1, "#output")
+               degree.html(degreeCurrent)
                matrix = new WebKitCSSMatrix(getComputedStyle($('#output')[0]).webkitTransform)
                loading.css 'top': output.width()*matrix.c-output.width()*matrix.a + screenCenter.y + output.height()/2 - loading.height()
                loading.css 'left': output.css 'left'
+               #console.log loading.css 'top'
+               rotate1Time = performance.now() - start 
+               rotate1Times.push rotate1Time
                ),1
   setInterval ( ->
+               start = performance.now()
                rotateAnim(90, 0.1, "#output2")
                rads = degreeCurrent/(180/Math.PI)
                matrix = (output2.height()*Math.sin(rads)+output2.height()*Math.cos(rads))*-1
                loading2.css 'top': matrix + screenCenter.y + output.height()/2 - loading.height()
                loading2.css 'left':  output2.css 'left'
-              ),1
+               rotate2Time = performance.now() - start
+               rotate2Times.push rotate2Time
+              ), 1
+              
+  setInterval ( ->
+    sum = 0
+    for time in rotate1Times
+      sum += time
+    avg = sum / rotate1Times.length
+    rotate1Times = []
+    $('#ms1').text 'Rotate 1 takes about ' + avg + 'ms to execute and runs for ' + sum + 'ms every second.'
+    
+    sum = 0
+    for time in rotate2Times
+      sum += time
+    avg = sum / rotate2Times.length
+    rotate2Times = []
+    $('#ms2').text 'Rotate 2 takes about ' + avg + 'ms to execute and runs for ' + sum + 'ms every second.'
+  ), 1000
+
  rotateAnim = (degree, speed, target) ->
-  var degreeCurrent = 0;
   #console.log degree
   #console.log degreeCurrent
   $(target).css 
@@ -58,5 +87,5 @@ ready = ->
    else
      degreeCurrent = 0
 
-$(document).ready(ready, );
+$(document).ready ready
    
