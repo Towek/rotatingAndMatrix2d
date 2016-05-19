@@ -36,16 +36,17 @@
       x: 1,
       y: 1
     };
-    $(window).mousemove(function(event) {
-      mouse.x = event.pageX;
-      mouse.y = event.pageY;
-      output.css({
-        "top": output.css('top' + mouse.y / 3)
-      });
-      return output.css({
-        "left": output.css('left' + mouse.x / 3)
-      });
-    });
+
+    /*$(window).mousemove (event)->
+      #console.log "Mouse move"
+      mouse.x = event.pageX
+      mouse.y = event.pageY
+      #console.log "X: "+mouse.x+"     "+"Y: "+mouse.y
+      ##console.log outputPos.top
+      output.css "top": output.css 'top' + mouse.y/3
+      output.css "left": output.css 'left' + mouse.x/3
+      #console.log mouse.x+"   "+mouse.y
+     */
     setInterval((function() {
       var matrix, rotate1Time, start;
       start = performance.now();
@@ -56,21 +57,22 @@
         'top': output.width() * matrix.c - output.width() * matrix.a + screenCenter.y + output.height() / 2 - loading.height()
       });
       loading.css({
-        'left': screenCenter.x + output.height() / 2 - loading.width() - 500
+        'left': output.css('left')
       });
       rotate1Time = performance.now() - start;
       return rotate1Times.push(rotate1Time);
     }), 10);
     setInterval((function() {
-      var rads, rotate2Time, start;
+      var matrix, rads, rotate2Time, start;
       start = performance.now();
       rotateAnim(90, 0.1, "#output2");
       rads = degreeCurrent / (180 / Math.PI);
+      matrix = (output2.height() * Math.sin(rads) + output2.height() * Math.cos(rads)) * -1;
       loading2.css({
-        'top': (output2.height() * (Math.cos(rads) * -1)) + (output2.height() * Math.sin(rads)) + screenCenter.y + output.height() - loading.height()
+        'top': matrix + screenCenter.y + output.height() / 2 - loading.height()
       });
       loading2.css({
-        'left': screenCenter.x + output.height() / 2 - loading.width() + 500
+        'left': output2.css('left')
       });
       rotate2Time = performance.now() - start;
       return rotate2Times.push(rotate2Time);

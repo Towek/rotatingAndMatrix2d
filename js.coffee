@@ -22,7 +22,7 @@ ready = ->
  
   doc = $(document)
   mouse = {x: 1, y:1}
-  $(window).mousemove (event)->
+  ###$(window).mousemove (event)->
     #console.log "Mouse move"
     mouse.x = event.pageX
     mouse.y = event.pageY
@@ -30,7 +30,7 @@ ready = ->
     ##console.log outputPos.top
     output.css "top": output.css 'top' + mouse.y/3
     output.css "left": output.css 'left' + mouse.x/3
-    #console.log mouse.x+"   "+mouse.y
+    #console.log mouse.x+"   "+mouse.y###
   
   setInterval ( -> 
                start = performance.now()
@@ -39,7 +39,7 @@ ready = ->
                degree.html(degreeCurrent)
                matrix = new WebKitCSSMatrix(getComputedStyle($('#output')[0]).webkitTransform)
                loading.css 'top': output.width()*matrix.c-output.width()*matrix.a + screenCenter.y + output.height()/2 - loading.height()
-               loading.css 'left': screenCenter.x + output.height()/2 - loading.width() - 500
+               loading.css 'left': output.css 'left'
                #console.log loading.css 'top'
                rotate1Time = performance.now() - start 
                rotate1Times.push rotate1Time
@@ -54,8 +54,9 @@ ready = ->
                #console.log "x: "+x
                #console.log matrix.a
                rads = degreeCurrent/(180/Math.PI)
-               loading2.css 'top': (output2.height()*(Math.cos(rads)*-1))+(output2.height()*Math.sin(rads)) + screenCenter.y + output.height() - loading.height()
-               loading2.css 'left':  screenCenter.x + output.height()/2 - loading.width() + 500
+               matrix = (output2.height()*Math.sin(rads)+output2.height()*Math.cos(rads))*-1
+               loading2.css 'top': matrix + screenCenter.y + output.height()/2 - loading.height()
+               loading2.css 'left':  output2.css 'left'
                rotate2Time = performance.now() - start
                rotate2Times.push rotate2Time
               ), 1
@@ -75,7 +76,7 @@ ready = ->
     rotate2Times = []
     $('#ms2').text 'Rotate 2 takes about ' + avg + 'ms to execute and runs for ' + sum + 'ms every second.'
   ), 1000
-              
+
  rotateAnim = (degree, speed, target) ->
   #console.log degree
   #console.log degreeCurrent
