@@ -1,13 +1,10 @@
 degreeCurrent = 0
-(($) ->
-) jQuery
 
 ready = ->
   output = $("#output")
   output2 = $("#output2")
   loading = $("#loading")
   loading2 = $("#loading2")
-  outputPos = output.position()
   degree = $("#debug_degree")
   
   screenCenter =
@@ -23,7 +20,7 @@ ready = ->
  
   doc = $(document)
   mouse = {x: 1, y:1}
-  $(window).mousemove (event)->
+  ###$(window).mousemove (event)->
     #console.log "Mouse move"
     mouse.x = event.pageX
     mouse.y = event.pageY
@@ -31,7 +28,7 @@ ready = ->
     ##console.log outputPos.top
     output.css "top": output.css 'top' + mouse.y/3
     output.css "left": output.css 'left' + mouse.x/3
-    #console.log mouse.x+"   "+mouse.y
+    #console.log mouse.x+"   "+mouse.y###
   
   setInterval ( -> 
                #console.log("Rotating");
@@ -39,11 +36,11 @@ ready = ->
                degree.html(degreeCurrent)
                matrix = new WebKitCSSMatrix(getComputedStyle($('#output')[0]).webkitTransform)
                loading.css 'top': output.width()*matrix.c-output.width()*matrix.a + screenCenter.y + output.height()/2 - loading.height()
-               loading.css 'left': screenCenter.x + output.height()/2 - loading.width() - 500
+               loading.css 'left': output.css 'left'
                #console.log loading.css 'top'
                ),1
   setInterval ( ->
-                #console.log("Rotating");
+                #console.log("Rotating")asdasdasd;
                rotateAnim(90, 0.1, "#output2")
                #y = (output.width()*Math.sin(degreeCurrent))+(output.height()*Math.cos(degreeCurrent))
                #x = (output.width()*Math.cos(degreeCurrent))-(output.height()*Math.sin(degreeCurrent))
@@ -51,8 +48,9 @@ ready = ->
                #console.log "x: "+x
                #console.log matrix.a
                rads = degreeCurrent/(180/Math.PI)
-               loading2.css 'top': (output2.height()*(Math.cos(rads)*-1))+(output2.height()*Math.sin(rads)) + screenCenter.y + output.height() - loading.height()
-               loading2.css 'left':  screenCenter.x + output.height()/2 - loading.width() + 500
+               matrix = (output2.height()*Math.sin(rads)+output2.height()*Math.cos(rads))*-1
+               loading2.css 'top': matrix + screenCenter.y + output.height()/2 - loading.height()
+               loading2.css 'left':  output2.css 'left'
               ),1
  rotateAnim = (degree, speed, target) ->
   #console.log degree
@@ -68,7 +66,7 @@ ready = ->
     degreeCurrent += speed
     #console.log degreeCurrent
    else
-     degreeCurrent = 0;
+     degreeCurrent = 0
 
 $(document).ready(ready, );
    
