@@ -9,73 +9,42 @@
   rotate2Times = [];
 
   ready = function() {
-    var degree, doc, loading, loading2, mouse, output, output2, screenCenter;
+    var degree, doc, loading, mouse, mousee, output, screenCenter;
     output = $("#output");
-    output2 = $("#output2");
     loading = $("#loading");
-    loading2 = $("#loading2");
     degree = $("#debug_degree");
+    mousee = $("#mousee");
     screenCenter = {
       x: $(document).width() / 2,
       y: $(document).height() / 2
     };
     output.css({
-      'top': screenCenter.y - output.height() / 2
+      'bottom': "90px"
     });
     output.css({
-      'left': screenCenter.x - output.width() / 2 - 500
-    });
-    output2.css({
-      'top': screenCenter.y - output.height() / 2
-    });
-    output2.css({
-      'left': screenCenter.x - output.width() / 2 + 500
+      'left': screenCenter.x - output.width() / 2
     });
     doc = $(document);
     mouse = {
       x: 1,
       y: 1
     };
-
-    /*$(window).mousemove (event)->
-      #console.log "Mouse move"
-      mouse.x = event.pageX
-      mouse.y = event.pageY
-      #console.log "X: "+mouse.x+"     "+"Y: "+mouse.y
-      ##console.log outputPos.top
-      output.css "top": output.css 'top' + mouse.y/3
-      output.css "left": output.css 'left' + mouse.x/3
-      #console.log mouse.x+"   "+mouse.y
-     */
+    $(window).mousemove(function(event) {
+      mouse.x = event.pageX;
+      return mouse.y = event.pageY;
+    });
     setInterval((function() {
-      var matrix, rotate1Time, start;
+      var rotate1Time, start;
       start = performance.now();
-      rotateAnim(90, 0.1, "#output");
-      degree.html(degreeCurrent);
-      matrix = new WebKitCSSMatrix(getComputedStyle($('#output')[0]).webkitTransform);
-      loading.css({
-        'top': output.width() * matrix.c - output.width() * matrix.a + screenCenter.y + output.height() / 2 - loading.height()
-      });
-      loading.css({
-        'left': output.css('left')
+      rotateAnim(90, 0.15, "#output", "#output2");
+      rotateAnim(90, 0.1, "#output2", "#output3");
+      rotateAnim(90, 0.05, "#output3", "#output4");
+      rotateAnim(90, 0.0, "#output4", "#none");
+      output.css({
+        "left": screenCenter.x - mouse.x / 4
       });
       rotate1Time = performance.now() - start;
       return rotate1Times.push(rotate1Time);
-    }), 1);
-    setInterval((function() {
-      var matrix, rads, rotate2Time, start;
-      start = performance.now();
-      rotateAnim(90, 0.1, "#output2");
-      rads = degreeCurrent / (180 / Math.PI);
-      matrix = (output2.height() * Math.sin(rads) + output2.height() * Math.cos(rads)) * -1;
-      loading2.css({
-        'top': matrix + screenCenter.y + output.height() / 2 - loading.height()
-      });
-      loading2.css({
-        'left': output2.css('left')
-      });
-      rotate2Time = performance.now() - start;
-      return rotate2Times.push(rotate2Time);
     }), 1);
     return setInterval((function() {
       var avg, i, j, len, len1, sum, time;
@@ -98,7 +67,10 @@
     }), 1000);
   };
 
-  rotateAnim = function(degree, speed, target) {
+  rotateAnim = function(degree, speed, target, bouncer) {
+    var $bouncer, $target, matrix, rads;
+    $target = $(target);
+    $bouncer = $(bouncer);
     $(target).css({
       '-webkit-transform': 'rotate(' + degreeCurrent + 'deg)',
       '-moz-transform': 'rotate(' + degreeCurrent + 'deg)',
@@ -106,11 +78,20 @@
       '-o-transform': 'rotate(' + degreeCurrent + 'deg)',
       'transform': 'rotate(' + degreeCurrent + 'deg)'
     });
+    rads = degreeCurrent / (180 / Math.PI);
+    matrix = ($target.height() * Math.sin(rads) + $target.height() * Math.cos(rads)) * -1;
+    $bouncer.css({
+      'top': matrix + $target.offset().top + $target.height() - $bouncer.height() - 15
+    });
+    $bouncer.css({
+      'left': $target.css('left')
+    });
     if (degreeCurrent < degree) {
-      return degreeCurrent += speed;
+      degreeCurrent += speed;
     } else {
-      return degreeCurrent = 0;
+      degreeCurrent = 0;
     }
+    return degreeCurrent;
   };
 
   $(document).ready(ready);
