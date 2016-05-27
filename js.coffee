@@ -18,13 +18,8 @@ ready = ->
   doc = $(document)
   mouse = {x: 1, y:1}
   $(window).mousemove (event)->
-    #console.log "Mouse move"
     mouse.x = event.pageX
     mouse.y = event.pageY
-    #console.log "X: "+mouse.x+"     "+"Y: "+mouse.y
-    ##console.log outputPos.top
-   
-    #console.log mouse.x+"   "+mouse.y
   
   setInterval ( -> 
                start = performance.now()
