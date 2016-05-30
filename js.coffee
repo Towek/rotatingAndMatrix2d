@@ -1,5 +1,4 @@
-rotationDegrees = [0,0,0,0]
-test = 0;
+degree_var = 0
 rotate1Times = []
 rotate2Times = []
 
@@ -59,7 +58,6 @@ ready = ->
   ), 1000
 
  rotateAnim = (degree, speed, target, bouncer) ->
-  degree_var = 0
   $target = $(target)
   $bouncer = $(bouncer)
   $(target).css 
