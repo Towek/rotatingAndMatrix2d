@@ -1,4 +1,5 @@
-degreeCurrent = 0
+rotationDegrees = [0,0,0,0]
+test = 0;
 rotate1Times = []
 rotate2Times = []
 
@@ -18,6 +19,7 @@ ready = ->
   doc = $(document)
   mouse = {x: 1, y:1}
   $(window).mousemove (event)->
+    #console.log "Mouse move"
     mouse.x = event.pageX
     mouse.y = event.pageY
   
@@ -57,24 +59,25 @@ ready = ->
   ), 1000
 
  rotateAnim = (degree, speed, target, bouncer) ->
+  degree_var = 0
   $target = $(target)
   $bouncer = $(bouncer)
   $(target).css 
-      '-webkit-transform': 'rotate(' + degreeCurrent + 'deg)'
-      '-moz-transform': 'rotate(' + degreeCurrent + 'deg)'
-      '-ms-transform': 'rotate(' + degreeCurrent + 'deg)'
-      '-o-transform': 'rotate(' + degreeCurrent + 'deg)'
-      'transform': 'rotate(' + degreeCurrent + 'deg)'
+      '-webkit-transform': 'rotate(' + degree_var + 'deg)'
+      '-moz-transform': 'rotate(' + degree_var + 'deg)'
+      '-ms-transform': 'rotate(' + degree_var + 'deg)'
+      '-o-transform': 'rotate(' + degree_var + 'deg)'
+      'transform': 'rotate(' + degree_var + 'deg)'
   
-  rads = degreeCurrent/(180/Math.PI)
+  rads = degree_var/(180/Math.PI)
   matrix = ($target.height()*Math.sin(rads)+$target.height()*Math.cos(rads))*-1
   $bouncer.css 'top': matrix + $target.offset().top + $target.height() - $bouncer.height() - 15
   $bouncer.css 'left': $target.css 'left'
-  if degreeCurrent < degree
-    degreeCurrent += speed
-    #console.log degreeCurrent
+  if degree_var < degree
+    degree_var += speed
+    console.log degree_var
    else
-     degreeCurrent = 0
-  return degreeCurrent
+     degree_var = 0
+  return degree_var
 $(document).ready ready
    
